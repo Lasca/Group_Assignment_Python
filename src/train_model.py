@@ -1,5 +1,5 @@
 """
-Train a Logistic Regression model for each ticker.
+Train ML models for each ticker (Logistic Regression and Random Forest).
 
 Usage:
     python src/train_model.py AAPL
@@ -12,6 +12,7 @@ import polars as pl
 import joblib
 from pathlib import Path
 from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, classification_report
 
 
@@ -22,9 +23,9 @@ TICKERS = ["AAPL", "MSFT", "GOOG", "AMZN", "TSLA", "META", "NVDA"]
 
 
 def train_model(ticker: str):
-    """Train and export a Logistic Regression model for a single ticker."""
+    """Train Logistic Regression and Random Forest, keep the best one."""
     print(f"\n{'='*50}")
-    print(f"Training model for {ticker}")
+    print(f"Training models for {ticker}")
     print(f"{'='*50}")
 
     # Load ML-ready data
@@ -43,23 +44,33 @@ def train_model(ticker: str):
 
     print(f"  Train: {X_train.shape[0]} rows, Test: {X_test.shape[0]} rows")
 
-    # Train
-    model = LogisticRegression(max_iter=1000)
-    model.fit(X_train, y_train)
+    # Train both models
+    models = {
+        "logistic_regression": LogisticRegression(max_iter=1000),
+        "random_forest": RandomForestClassifier(n_estimators=100, random_state=42),
+    }
 
-    # Evaluate
-    y_pred = model.predict(X_test)
-    accuracy = accuracy_score(y_test, y_pred)
-    print(f"  Accuracy: {accuracy:.4f}")
-    print(classification_report(y_test, y_pred, target_names=["Down", "Up"]))
+    best_name, best_model, best_acc = None, None, 0
 
-    # Save model
+    for name, model in models.items():
+        model.fit(X_train, y_train)
+        y_pred = model.predict(X_test)
+        acc = accuracy_score(y_test, y_pred)
+        print(f"  {name}: {acc:.4f}")
+
+        if acc > best_acc:
+            best_name, best_model, best_acc = name, model, acc
+
+    print(f"  Best: {best_name} ({best_acc:.4f})")
+    print(classification_report(y_test, best_model.predict(X_test), target_names=["Down", "Up"]))
+
+    # Save best model
     MODELS_DIR.mkdir(exist_ok=True)
-    model_path = MODELS_DIR / f"{ticker.lower()}_logistic_regression.joblib"
-    joblib.dump(model, model_path)
+    model_path = MODELS_DIR / f"{ticker.lower()}_best_model.joblib"
+    joblib.dump(best_model, model_path)
     print(f"  Model saved to {model_path}")
 
-    return accuracy
+    return best_acc, best_name
 
 
 def main():
@@ -83,8 +94,8 @@ def main():
     print(f"\n{'='*50}")
     print("Summary")
     print(f"{'='*50}")
-    for ticker, acc in results.items():
-        print(f"  {ticker}: {acc:.4f}")
+    for ticker, (acc, name) in results.items():
+        print(f"  {ticker}: {acc:.4f} ({name})")
 
 
 if __name__ == "__main__":
