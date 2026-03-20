@@ -13,8 +13,7 @@ st.set_page_config(page_title="Go Live", page_icon="🔴", layout="wide")
 
 st.title("Go Live: Real-Time Predictions")
 
-# Available tickers (will expand later to 5+)
-TICKERS = ["AAPL"]
+TICKERS = ["AAPL", "MSFT", "GOOG", "AMZN", "TSLA", "META", "NVDA"]
 
 # Ticker selector
 ticker = st.selectbox("Select a company", TICKERS)
