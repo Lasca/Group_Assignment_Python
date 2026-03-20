@@ -31,7 +31,7 @@ def extract(ticker: str) -> pl.DataFrame:
 
 def transform(df: pl.DataFrame) -> pl.DataFrame:
     """Clean data, engineer features, normalize, and create target."""
-    # Cast Date, fill Dividend nulls, drop unnecessary columns
+    # Cast Date, fill Dividend nulls with 0.0, drop unnecessary columns
     df = (
         df
         .with_columns(
