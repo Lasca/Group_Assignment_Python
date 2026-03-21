@@ -102,7 +102,7 @@ TICKERS = ["MSFT", "GOOG", "AMZN", "TSLA", "NVDA"]
 # Controls
 col1, col2 = st.columns([2, 1])
 with col1:
-    ticker = st.selectbox("Select a company", TICKERS)
+    ticker = st.selectbox("Select a company", TICKERS, index=TICKERS.index("TSLA"))
 with col2:
     initial_cash = st.number_input("Initial capital ($)", value=10000, min_value=1000, step=1000)
 
@@ -138,6 +138,7 @@ if st.button("Run Backtest", type="primary"):
             feature_cols = [c for c in df.columns if c not in ["Date", "target"]]
             X_test = test_data.select(feature_cols).to_numpy()
             predictions = model.predict(X_test)
+            probabilities = model.predict_proba(X_test)[:, 1]  # probability of UP
 
             # Get actual prices for test period
             test_dates = test_data["Date"].to_list()
@@ -264,6 +265,7 @@ if st.button("Run Backtest", type="primary"):
                 "Date": [str(d) for d in dates_list],
                 "Price": [float(p) for p in prices_list],
                 "Prediction": [int(p) for p in predictions[:len(prices_list)]],
+                "Probability (UP)": [round(float(p), 4) for p in probabilities[:len(prices_list)]],
                 "Action": actions,
                 "Available Cash": [float(c) for c in cash_history],
                 "Portfolio Value": [float(v) for v in portfolio_values],

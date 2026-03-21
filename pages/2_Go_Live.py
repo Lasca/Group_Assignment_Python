@@ -91,7 +91,7 @@ TICKERS = ["MSFT", "GOOG", "AMZN", "TSLA", "NVDA"]
 # Controls
 col1, col2, col3 = st.columns([2, 1, 1])
 with col1:
-    ticker = st.selectbox("Select a company", TICKERS)
+    ticker = st.selectbox("Select a company", TICKERS, index=TICKERS.index("TSLA"))
 with col2:
     start_date = st.date_input("Start date", date.today() - timedelta(days=90))
 with col3:
@@ -231,13 +231,26 @@ if st.button("Fetch Data and Predict", type="primary"):
                     </div>
                     """, unsafe_allow_html=True)
 
+                # Raw data
+                st.markdown(f'<h2 class="section-header">Raw Data (from API)</h2>', unsafe_allow_html=True)
+                raw_display = raw_prices.with_columns(pl.col("Date").str.to_date("%Y-%m-%d").cast(pl.Utf8)).to_pandas()
+                st.dataframe(raw_display, height=300, use_container_width=True)
+
                 # Transformed data
-                st.markdown(f'<h2 class="section-header">Recent Transformed Data</h2>', unsafe_allow_html=True)
-                st.dataframe(
-                    transformed.with_columns(pl.col("Date").cast(pl.Utf8)).select(
+                st.markdown(f'<h2 class="section-header">Transformed Data (after ETL & Normalization)</h2>', unsafe_allow_html=True)
+                display_df = (
+                    transformed
+                    .filter(~((pl.col("Close") == 0) & (pl.col("High") == 0)))
+                    .with_columns(pl.col("Date").cast(pl.Utf8))
+                    .select(
                         [c for c in transformed.columns if c not in ["Dividend", "Shares Outstanding"]]
                         + ["Dividend", "Shares Outstanding"]
-                    ).tail(10).to_pandas(),
+                    )
+                    .to_pandas()
+                )
+                st.dataframe(
+                    display_df,
+                    height=400,
                     use_container_width=True,
                 )
 
