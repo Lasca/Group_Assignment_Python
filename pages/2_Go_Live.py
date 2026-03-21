@@ -67,9 +67,16 @@ st.markdown("""
     }
     .section-header {
         color: #1E90FF;
-        border-bottom: 2px solid #1E90FF40;
-        padding-bottom: 0.5rem;
-        margin-top: 2rem;
+        padding-bottom: 0.3rem;
+        margin-top: 2.5rem;
+        margin-bottom: 1rem;
+    }
+
+    /* Clean dividers */
+    hr {
+        border: none;
+        border-top: 1px solid #1E90FF15;
+        margin: 2rem 0;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -227,7 +234,10 @@ if st.button("Fetch Data and Predict", type="primary"):
                 # Transformed data
                 st.markdown(f'<h2 class="section-header">Recent Transformed Data</h2>', unsafe_allow_html=True)
                 st.dataframe(
-                    transformed.tail(10).to_pandas(),
+                    transformed.with_columns(pl.col("Date").cast(pl.Utf8)).select(
+                        [c for c in transformed.columns if c not in ["Dividend", "Shares Outstanding"]]
+                        + ["Dividend", "Shares Outstanding"]
+                    ).tail(10).to_pandas(),
                     use_container_width=True,
                 )
 

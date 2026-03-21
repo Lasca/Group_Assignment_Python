@@ -53,9 +53,9 @@ st.markdown("""
     }
     .section-header {
         color: #1E90FF;
-        border-bottom: 2px solid #1E90FF40;
-        padding-bottom: 0.5rem;
-        margin-top: 2rem;
+        padding-bottom: 0.3rem;
+        margin-top: 2.5rem;
+        margin-bottom: 1rem;
     }
     .team-member {
         background: #1a2744;
@@ -76,6 +76,13 @@ st.markdown("""
         font-size: 1.8rem;
         font-weight: 700;
     }
+
+    /* Clean dividers */
+    hr {
+        border: none;
+        border-top: 1px solid #1E90FF15;
+        margin: 2rem 0;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -89,7 +96,7 @@ st.markdown('<h2 class="section-header">About</h2>', unsafe_allow_html=True)
 st.write("""
 This application is an automated daily trading system that uses machine learning
 to predict stock market movements. It fetches real-time data from SimFin, applies
-data transformations, and generates trading signals using a trained classification model.
+data transformations, and generates trading signals using the best performing classification model.
 """)
 
 # How it works
@@ -115,8 +122,8 @@ with col2:
         <div class="step-number">02</div>
         <h4>Model Training</h4>
         <p style="color: #8899AA; font-size: 0.9rem;">
-            A machine learning model is trained on the processed data to predict
-            whether a stock's price will rise or fall the next day.
+            Logistic Regression & Random Forest models are trained on the processed data to predict
+            whether a stock's price will rise or fall the next day. The best performing model is kept.
         </p>
     </div>
     """, unsafe_allow_html=True)
@@ -152,6 +159,15 @@ for col, (label, value) in zip(cols, tech):
         </div>
         """, unsafe_allow_html=True)
 
+st.markdown("")
+st.markdown("""
+- **Polars** over Pandas for its superior performance with large datasets, especially when working with Parquet files
+- **scikit-learn** provides reliable, well-documented implementations of Logistic Regression and Random Forest
+- **SimFin** offers both bulk downloads and a REST API, making it suitable for offline training and live predictions
+- **Streamlit** allows rapid prototyping of interactive data applications with minimal frontend code
+""")
+st.markdown("")
+
 # Team
 st.markdown('<h2 class="section-header">Development Team</h2>', unsafe_allow_html=True)
 
@@ -164,3 +180,11 @@ team = [
 ]
 for member in team:
     st.markdown(f'<div class="team-member">{member}</div>', unsafe_allow_html=True)
+
+st.markdown('<h2 class="section-header">Honorary Team Member</h2>', unsafe_allow_html=True)
+st.markdown("""
+<div class="team-member" style="border-left: 3px solid #87CEFA;">
+    <strong>Claude Code</strong> (Anthropic) - Our 10x engineer that never sleeps (unless you run out of tokens ;)
+</div>
+""", unsafe_allow_html=True)
+st.caption("We believe in full transparency about AI usage. Claude Code assisted with ideation, structuring, debugging, and learning throughout this project.")
