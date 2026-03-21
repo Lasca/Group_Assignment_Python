@@ -114,6 +114,13 @@ if st.button("Run Backtest", type="primary"):
             # Load ML-ready data
             df = pl.read_parquet(os.path.join(DATA_DIR, "tickers_ml_ready", f"{ticker.lower()}_ml_ready.parquet"))
 
+            # Load model
+            model = joblib.load(os.path.join(MODELS_DIR, f"{ticker.lower()}_best_model.joblib"))
+
+            # Time-based split (same 80/20 as training)
+            split_idx = int(len(df) * 0.8)
+            test_data = df.slice(split_idx)
+
             # Fetch raw prices from SimFin API for actual dollar values
             client = PySimFin()
             start_date = str(test_data["Date"].min())
@@ -126,13 +133,6 @@ if st.button("Run Backtest", type="primary"):
                 .rename({"Adjusted Closing Price": "Price"})
                 .select(["Date", "Price"])
             )
-
-            # Load model
-            model = joblib.load(os.path.join(MODELS_DIR, f"{ticker.lower()}_best_model.joblib"))
-
-            # Time-based split (same 80/20 as training)
-            split_idx = int(len(df) * 0.8)
-            test_data = df.slice(split_idx)
 
             # Generate predictions
             feature_cols = [c for c in df.columns if c not in ["Date", "target"]]
