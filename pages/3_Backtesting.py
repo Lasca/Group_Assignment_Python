@@ -265,7 +265,7 @@ if st.button("Run Backtest", type="primary"):
                 "Date": [str(d) for d in dates_list],
                 "Price": [float(p) for p in prices_list],
                 "Prediction": [int(p) for p in predictions[:len(prices_list)]],
-                "Probability (UP)": [f"{float(p) * 100:.1f}%" for p in probabilities[:len(prices_list)]],
+                "Probability (UP)": [f"{float(p) * 100:.0f}%" for p in probabilities[:len(prices_list)]],
                 "Action": actions,
                 "Available Cash": [float(c) for c in cash_history],
                 "Portfolio Value": [float(v) for v in portfolio_values],
