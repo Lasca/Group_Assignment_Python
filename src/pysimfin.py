@@ -19,11 +19,19 @@ class PySimFin:
             api_key: SimFin API key. If not provided, loads from .env file.
         """
         if api_key is None:
-            load_dotenv()
-            api_key = os.getenv("SIMFIN_API_KEY")
+            # Try Streamlit secrets first (for cloud deployment), then .env
+            try:
+                import streamlit as st
+                api_key = st.secrets.get("SIMFIN_API_KEY")
+            except Exception:
+                pass
+
+            if not api_key:
+                load_dotenv()
+                api_key = os.getenv("SIMFIN_API_KEY")
 
         if not api_key:
-            raise ValueError("No API key provided. Set SIMFIN_API_KEY in .env or pass it directly.")
+            raise ValueError("No API key provided. Set SIMFIN_API_KEY in .env or Streamlit secrets.")
 
         self.headers = {"Authorization": f"api-key {api_key}"}
         self._last_request_time = 0
