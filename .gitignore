@@ -1,6 +1,9 @@
-*.parquet
+data/us-shareprices-daily.parquet
+data/us-companies.parquet
+data/aapl_ml_ready.parquet
 __pycache__/
 .ipynb_checkpoints/
 .env
 .DS_Store
 .vscode/
+teammate_files/

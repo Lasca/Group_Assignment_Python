@@ -2,7 +2,12 @@ import streamlit as st
 import polars as pl
 import joblib
 import os
+import sys
 import matplotlib.pyplot as plt
+
+# Add project root to path so we can import our modules
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from src.pysimfin import PySimFin
 
 st.set_page_config(page_title="Backtesting", page_icon="chart_with_upwards_trend", layout="wide")
 
@@ -109,14 +114,16 @@ if st.button("Run Backtest", type="primary"):
             # Load ML-ready data
             df = pl.read_parquet(os.path.join(DATA_DIR, "tickers_ml_ready", f"{ticker.lower()}_ml_ready.parquet"))
 
-            # Load raw prices for actual dollar values
-            prices_raw = pl.read_parquet(os.path.join(DATA_DIR, "us-shareprices-daily.parquet"))
+            # Fetch raw prices from SimFin API for actual dollar values
+            client = PySimFin()
+            start_date = str(test_data["Date"].min())
+            end_date = str(test_data["Date"].max())
+            raw_api = client.get_share_prices(ticker, start_date, end_date)
             prices_raw = (
-                prices_raw
-                .filter(pl.col("Ticker") == ticker)
+                raw_api
                 .with_columns(pl.col("Date").str.to_date("%Y-%m-%d"))
                 .sort("Date")
-                .rename({"Adj. Close": "Price"})
+                .rename({"Adjusted Closing Price": "Price"})
                 .select(["Date", "Price"])
             )
 
