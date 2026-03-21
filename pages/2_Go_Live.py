@@ -184,6 +184,9 @@ if st.button("Fetch Data and Predict", type="primary"):
                 feature_cols = [c for c in transformed.columns if c not in ["Date", "target"]]
                 latest = transformed.select(feature_cols).tail(1).to_numpy()
                 prediction = model.predict(latest)[0]
+                probability = model.predict_proba(latest)[0]
+                confidence = int(max(probability) * 100)
+                model_type = type(model).__name__.replace("Classifier", "")
 
                 latest_date = transformed["Date"].max()
 
@@ -219,15 +222,15 @@ if st.button("Fetch Data and Predict", type="primary"):
                 if prediction == 1:
                     st.markdown(f"""
                     <div class="prediction-up">
-                        <h2>UP after {latest_date}</h2>
-                        <p style="color: #88DDAA;">The model predicts {ticker} will increase in price.</p>
+                        <h2>UP after {latest_date} ({confidence}% confidence)</h2>
+                        <p style="color: #88DDAA;">The {model_type} model predicts {ticker} will increase in price.</p>
                     </div>
                     """, unsafe_allow_html=True)
                 else:
                     st.markdown(f"""
                     <div class="prediction-down">
-                        <h2>DOWN after {latest_date}</h2>
-                        <p style="color: #DD8888;">The model predicts {ticker} will decrease in price.</p>
+                        <h2>DOWN after {latest_date} ({confidence}% confidence)</h2>
+                        <p style="color: #DD8888;">The {model_type} model predicts {ticker} will decrease in price.</p>
                     </div>
                     """, unsafe_allow_html=True)
 
