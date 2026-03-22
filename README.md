@@ -11,6 +11,10 @@ This project implements a full end-to-end pipeline:
 3. **Web Application**: Streamlit app with live predictions via the SimFin API and historical backtesting
 4. **Trading Strategy**: Buy-and-Sell strategy based on model predictions, compared against a Buy-and-Hold baseline
 
+## Live Application
+
+**[greatassignment.streamlit.app](https://greatassignment.streamlit.app)**
+
 ## Supported Tickers
 
 MSFT, GOOG, AMZN, TSLA, NVDA

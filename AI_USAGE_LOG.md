@@ -10,8 +10,7 @@ This document describes how AI tools were used throughout the development of thi
 
 ### Ideation and Planning
 - Helped structure the project into logical steps (ETL, model training, API wrapper, web app)
-- Suggested feature engineering a
-pproaches (moving averages, volatility, lag returns)
+- Suggested feature engineering approaches (moving averages, volatility, lag returns)
 - Recommended comparing Logistic Regression vs Random Forest and keeping the best model
 
 ### Code Development
@@ -29,6 +28,16 @@ pproaches (moving averages, volatility, lag returns)
 - Explained financial concepts (Adjusted Close, stock splits, Buy-and-Hold strategy)
 - Clarified ML concepts (why time-based splits for time series, why normalization matters for Logistic Regression)
 - Helped the team understand the full data pipeline from raw CSV to live prediction
+
+## What Worked Well
+- Iterative development: building one step at a time (ETL for one ticker, then scaling to all) was very effective with AI guidance
+- Debugging was significantly faster. Claude could read error messages and suggest fixes immediately
+- Learning complex concepts (e.g. why Adjusted Close matters, how min-max normalization affects model input) through conversation was more intuitive than reading documentation
+
+## What Did Not Work Well
+- Occasionally, generated code had subtle issues (e.g. computing features on normalized data instead of raw data, causing infinity values)
+- CSS tricks for Streamlit sidebar customization were unreliable and had to be reverted
+- We had to be careful not to accept changes blindly. Testing each change locally before committing was essential
 
 ## Reflection
 
