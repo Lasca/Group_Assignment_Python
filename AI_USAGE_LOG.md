@@ -35,7 +35,7 @@ This document describes how AI tools were used throughout the development of thi
 - Learning complex concepts (e.g. why Adjusted Close matters, how min-max normalization affects model input) through conversation was more intuitive than reading documentation
 
 ## What Did Not Work Well
-- Occasionally, generated code had subtle issues (e.g. computing features on normalized data instead of raw data, causing infinity values)
+- Occasionally, generated code had subtle issues. For example, it once applied normalization before feature engineering (the creation of new transformed columns), which distorted features like *percentage change* since they need raw price values to produce meaningful results
 - CSS tricks for Streamlit sidebar customization were unreliable and had to be reverted
 - We had to be careful not to accept changes blindly. Testing each change locally before committing was essential
 

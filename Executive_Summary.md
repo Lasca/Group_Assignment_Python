@@ -2,7 +2,7 @@
 
 ## Automated Daily Trading System
 
-Group 6 | Python for Data Analysis II | March 2025
+Group 6 | Python for Data Analysis II | March 2026
 
 **Live App:** greatassignment.streamlit.app | **GitHub:** github.com/Lasca/Group_Assignment_Python
 
