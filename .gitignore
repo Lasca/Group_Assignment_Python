@@ -1,9 +1,17 @@
+# Large data files (raw bulk downloads)
 data/us-shareprices-daily.parquet
 data/us-companies.parquet
-data/aapl_ml_ready.parquet
+
+# Python
 __pycache__/
 .ipynb_checkpoints/
+
+# Environment and secrets
 .env
+
+# OS and editor
 .DS_Store
 .vscode/
+
+# Internal team files (not part of deliverable)
 teammate_files/

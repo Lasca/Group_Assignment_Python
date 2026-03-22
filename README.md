@@ -35,7 +35,11 @@ notebooks/
   Part_1.2_ML_Model.ipynb        # Model training and evaluation
   Part_1.3_Trading_Strategy.ipynb # Trading strategy backtest
 models/                  # Trained model files (.joblib)
-data/                    # Raw and processed data (not tracked in git)
+data/
+  tickers_ml_ready/      # ML-ready Parquet files per ticker (tracked in git)
+  *.csv                  # Raw SimFin bulk downloads (tracked in git)
+docs/
+  Executive_Summary.pdf  # Final executive summary with screenshots
 ```
 
 ## Setup
